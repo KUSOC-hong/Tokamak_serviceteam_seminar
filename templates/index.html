@@ -4,7 +4,7 @@
         <meta charset="UTF-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>비온미디어 | 크립토 뉴스 리서치 도구</title>
+        <title>BONMEDIA | Crypto News Research Tool</title>
         <link rel="shortcut icon" href="https://cdn.bonmedia.kr/image/logo/favicon.png">
         <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -37,6 +37,11 @@
             .card {
                 margin-bottom: 15px;
             }
+            
+            ::-webkit-input-placeholder {
+            text-align: center;
+            }
+
         </style>
         <script>
             $(document).ready(function () {
@@ -44,9 +49,33 @@
                 make_article();
             });
 
+            // function sleep(delay) {
+            //     let start = new Date().getTime();
+            //     while (new Date().getTime() < start + delay);
+            // }
+
+            // function onkey(){
+            //         search();
+            // }
+
+            // function onkey(event){
+            //     // if (event.keyCode == 13) {
+            //         search();
+            //     // }
+            // }
+            
+            window.addEventListener("load", function(){
+                document.getElementById("searchbox").addEventListener("keypress", function(){
+                    if(event.keyCode == 13){
+                        search();
+                    }
+                });
+            });
+
+
             function make_article() {
                 // #article_box의 내부 html 태그를 모두 삭제
-                $('#article-box').empty()
+                $('#article-box').empty();
 
                 // "/api/list" 주소로 서버에 GET 방식으로 article_list를 요청
                 $.ajax({
@@ -55,17 +84,17 @@
                     data: {},
                     success: function (response) {
                         // 서버가 response한 article_list를 article라는 변수에 저장
-                        let news = response['news_list']
+                        let news = response['news_list'];
                         // for문에서 article 배열 각 요소를 순차적으로 조회
                         for (let i = 0; i < news.length; i++) {
-                            let article = news[i]
+                            let article = news[i];
                             // article[i] 요소의 각 키 값을 활용하여 값 조회
-                            let title = article['title']
-                            let description = article['description']
-                            let srcname = article['srcname']
-                            let img = article['img']
-                            let url = article['url']
-                            let publishedat = article['publishedat']
+                            let title = article['title'];
+                            let description = article['description'];
+                            let srcname = article['srcname'];
+                            let img = article['img'];
+                            let url = article['url'];
+                            let publishedat = article['publishedat'];
 
                             // 아티클 카드 생성, 날짜 및 시간은 slicing해서 출력
                             let tempHtml = `<div class="card">
@@ -91,17 +120,17 @@
                                             <footer class="card-footer">
 
                                             </footer>
-                                        </div>`
+                                        </div>`;
 
                             // #article-box에 temp_html 추가
-                            $('#article-box').append(tempHtml)
+                            $('#article-box').append(tempHtml);
                         }
                     }
                 });
             }
 
             function search() {
-                $('#article-box').empty()
+                $('#article-box').empty();
 
                 $.ajax({
                     type: "POST",
@@ -110,13 +139,13 @@
                     success: function (response) {
                         let news = response['queries']
                         for (let i = 0; i < news.length; i++) {
-                            let article = news[i]
-                            let title = article['title']
-                            let description = article['description']
-                            let srcname = article['srcname']
-                            let img = article['img']
-                            let url = article['url']
-                            let publishedat = article['publishedat']
+                            let article = news[i];
+                            let title = article['title'];
+                            let description = article['description'];
+                            let srcname = article['srcname'];
+                            let img = article['img'];
+                            let url = article['url'];
+                            let publishedat = article['publishedat'];
 
                             let tempHtml = `<div class="card">
                                             <div class="card-content">
@@ -141,13 +170,10 @@
                                             <footer class="card-footer">
 
                                             </footer>
-                                        </div>`
+                                        </div>`;
 
-                            $('#article-box').append(tempHtml)
+                            $('#article-box').append(tempHtml);
                         }
-
-
-
                     }
                 });
             }
@@ -166,12 +192,13 @@
                     </h1>
                 </div>
             </div>
-
-            <input type="text" id = "searchbox">
-            <button class="button is-info" id="save_button" onclick="search()">검색</button>
-            <p id = "datalist"></p>
-        
         </section>
+        <br>
+        <div align="center">
+            <input id="searchbox" type="text" class="input is-info " style="width:40%"
+            placeholder="Search Any Crypto News Title"  autofocus>
+            <button class="button is-info" id="search_button" onclick="search()">Search</button>
+        </div>
         <div class="article-list" id="article-box">
             <div class="card">
                 <div class="card-content">

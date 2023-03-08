@@ -22,7 +22,7 @@ def news_list():
 def search():
     searchbox = request.form['text']
     query   = list(db.news.find({"title": {"$regex": searchbox, "$options": "i"}}, {'_id': False}).sort('publishedat', -1))
-    print(query)
+    # print(query)
     return jsonify({'result': 'success', 'queries': query })
 
 
