@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>비온미디어 | 크립토 뉴스 리서치 도구</title>
+        <link rel="shortcut icon" href="https://cdn.bonmedia.kr/image/logo/favicon.png">
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <style>
+            * {
+                font-family: 'Nanum Gothic', serif;
+            }
+
+            .center {
+                text-align: center;
+            }
+
+            .article-list {
+                width: 800px;
+                margin: 15px auto 0 auto;
+            }
+
+            .article-name {
+                display: inline-block;
+            }
+
+            .article-name:hover {
+                text-decoration: underline;
+            }
+
+            .card {
+                margin-bottom: 15px;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                // index.html 로드가 완료되면 자동으로 showNews() 함수를 호출
+                make_article();
+            });
+
+            function make_article() {
+                // #article_box의 내부 html 태그를 모두 삭제
+                $('#article-box').empty()
+
+                // "/api/list" 주소로 서버에 GET 방식으로 article_list를 요청
+                $.ajax({
+                    type: "GET",
+                    url: "/api/list",
+                    data: {},
+                    success: function (response) {
+                        // 서버가 response한 article_list를 article라는 변수에 저장
+                        let news = response['news_list']
+                        // for문에서 article 배열 각 요소를 순차적으로 조회
+                        for (let i = 0; i < news.length; i++) {
+                            let article = news[i]
+                            // article[i] 요소의 각 키 값을 활용하여 값 조회
+                            let title = article['title']
+                            let description = article['description']
+                            let srcname = article['srcname']
+                            let img = article['img']
+                            let url = article['url']
+                            let publishedat = article['publishedat']
+
+                            // 아티클 카드 생성, 날짜 및 시간은 slicing해서 출력
+                            let tempHtml = `<div class="card">
+                                            <div class="card-content">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                <figure class="image is-128x128">
+                                                    <a href="${url}" target="_blank">
+                                                    <img class="is-rounded"
+                                                    src="${img}"
+                                                    alt="Placeholder image"
+                                                    />
+                                                    </a>
+                                                </figure>
+                                                </div>
+                                                <div class="media-content">
+                                                    <a href="${url}" target="_blank" class="article-name title is-4">${title}</a>
+                                                    <p class="subtitle is-6"><b>${srcname}</b>&nbsp&nbsp'${publishedat.slice(2,-10)}&nbsp${publishedat.slice(11,-1)}</p>
+                                                    <p class="subtitle is-6">${description}</p>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <footer class="card-footer">
+
+                                            </footer>
+                                        </div>`
+
+                            // #article-box에 temp_html 추가
+                            $('#article-box').append(tempHtml)
+                        }
+                    }
+                });
+            }
+
+            function search() {
+                $('#article-box').empty()
+
+                $.ajax({
+                    type: "POST",
+                    url: "/search",
+                    data: {text:$("#searchbox").val()},
+                    success: function (response) {
+                        let news = response['queries']
+                        for (let i = 0; i < news.length; i++) {
+                            let article = news[i]
+                            let title = article['title']
+                            let description = article['description']
+                            let srcname = article['srcname']
+                            let img = article['img']
+                            let url = article['url']
+                            let publishedat = article['publishedat']
+
+                            let tempHtml = `<div class="card">
+                                            <div class="card-content">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                <figure class="image is-128x128">
+                                                    <a href="${url}" target="_blank">
+                                                    <img class="is-rounded"
+                                                    src="${img}"
+                                                    alt="Placeholder image"
+                                                    />
+                                                    </a>
+                                                </figure>
+                                                </div>
+                                                <div class="media-content">
+                                                    <a href="${url}" target="_blank" class="article-name title is-4">${title}</a>
+                                                    <p class="subtitle is-6"><b>${srcname}</b>&nbsp&nbsp'${publishedat.slice(2,-10)}&nbsp${publishedat.slice(11,-1)}</p>
+                                                    <p class="subtitle is-6">${description}</p>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <footer class="card-footer">
+
+                                            </footer>
+                                        </div>`
+
+                            $('#article-box').append(tempHtml)
+                        }
+
+
+
+                    }
+                });
+            }
+
+        
+
+        </script>
+    </head>
+    <body>
+        <section class="hero is-info">
+            <div class="hero-body">
+                <div class="container center">
+                    <img src="https://cdn.bonmedia.kr/image/logo/toplogo_20221228012548.png">
+                    <h1 class="title">
+                        Latest Crypto News Research Tool
+                    </h1>
+                </div>
+            </div>
+
+            <input type="text" id = "searchbox">
+            <button class="button is-info" id="save_button" onclick="search()">검색</button>
+            <p id = "datalist"></p>
+        
+        </section>
+        <div class="article-list" id="article-box">
+            <div class="card">
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-128x128">
+                                <img
+                                        src="https://cdn.bonmedia.kr/image/logo/toplogo_20221228012548.png"
+                                        alt="bonmedia ci image"
+                                />
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <a href="#" target="_blank" class="article-name title is-4">Crypto boom is coming</a>
+                            <p class="subtitle is-6">techcrunch</p>
+                        </div>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
