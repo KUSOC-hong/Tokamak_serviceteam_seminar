@@ -15,7 +15,7 @@ db = client.dbbonmedia
 
 # DB에 저장할 newsapi의 article을 가져오는 함수
 def get_articles():
-    newsapi = NewsApiClient(api_key ='70fdb9ba81ba40b6bda148e672898bd9')
+    newsapi = NewsApiClient(api_key ='###API_KEY###')
     articles = newsapi.get_everything(q='(crypto OR web3)',
                                     domains='techcrunch.com,coindesk.com,cryptonews.com,decrypt.co,cointelegraph.com,coinrivet.com,dailycoin.com,coinedition.com',
                                     from_param='2023-02-27',
