@@ -1,6 +1,8 @@
 # BONMEDIA News Research Tool
 ### 2023-1st semester serviceteam_seminar
 ## README.md
+### Thumbnail
+![bonscraper](https://github.com/hongvincent/BONMEDIA-News-Research-Tool/assets/114135756/2db32405-1405-4959-b7ec-a8dea293e72f)
 
 ### Python Flask Web Application with MongoDB Backend
 
