@@ -2,7 +2,7 @@
 ### 2023-1st semester serviceteam_seminar
 ## README.md
 ### Thumbnail
-![bonscraper](https://github.com/hongvincent/BONMEDIA-News-Research-Tool/assets/114135756/2db32405-1405-4959-b7ec-a8dea293e72f)
+![bonscraper](https://github.com/hongvincent/BONMEDIA-News-Research-Tool/assets/114135756/1e3ffa21-beff-4446-b936-61f5e50b8ce1)
 
 ### Python Flask Web Application with MongoDB Backend
 
